@@ -5,15 +5,18 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement 
 from selenium.common.exceptions import *
 from selenium.webdriver.support.ui import Select
+import imputacion_v2 as imp
 
 class Imputacion:
 
     browser:webdriver.Chrome=None 
     tiempo_base=None
+    project = ""
 
-    def __init__(self,browser,tiempo_base):
+    def __init__(self,browser,tiempo_base,project):
         self.browser=browser
         self.tiempo_base=tiempo_base
+        self.project = project
 
     def completarHasta8H(self,fecha):#OK
         total = self.obtenerTotalHorasImputadas(fecha[4:8]+"-"+fecha[2:4]+"-"+fecha[0:2])
@@ -112,13 +115,14 @@ class Imputacion:
         sleep(0.5*self.tiempo_base)
         iconos = search_padre.find_element(By.CLASS_NAME,"float_rigth")
         iconos.find_element(By.TAG_NAME,"input").click()
+        sleep(0.5*self.tiempo_base)
         #list of found remedys
         try:
             tabla = self.browser.find_element(By.ID,"objecttableCUso")
             lista = tabla.find_elements(By.TAG_NAME,"tr")
             for iter in lista:
                 try:
-                    if iter.find_elements(By.TAG_NAME,"td")[1].get_attribute('innerHTML').__contains__("320210017E"):#change by proyect name
+                    if iter.find_elements(By.TAG_NAME,"td")[1].get_attribute('innerHTML').__contains__(self.project):
                         iter.find_element(By.LINK_TEXT,remedy).click()
                         break
                 except:

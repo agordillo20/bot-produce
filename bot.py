@@ -16,19 +16,19 @@ class Bot():
     userZS:str
     passZS:str
 
-    def __init__(self,userProduce:str,passProduce:str) -> None:
-        self.init()
+    def __init__(self,userProduce:str,passProduce:str,project:str) -> None:
+        self.init(project)
         self.loadProduce(userProduce,passProduce)
         self.leerFichero()
 
-    def init(self):
+    def init(self,project):
         self.url_produce = "https://produce.viewnext.com/produce/do/login"
         self.url_produce_home = "https://produce.viewnext.com/produce/do/view/preprincipal?aleat=0.08351092456268738"
         self.chrome_options = Options()
         self.chrome_options.add_experimental_option("detach", True)
         self.browser = webdriver.Chrome(options=self.chrome_options)
         self.browser.maximize_window()
-        self.imputacion = Imputacion(self.browser,2)
+        self.imputacion = Imputacion(self.browser,3,project)
             
     def loadProduce(self,userProduce,passProduce):
         self.browser.get(self.url_produce)
